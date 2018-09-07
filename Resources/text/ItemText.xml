@@ -1,0 +1,45 @@
+<dict>
+	<!-- new game layer -->
+	<key>AI</key>
+	<string>电  脑</string>
+	<key>GilPlayer</key>
+	<string>小土豆</string>
+	<key>WendyPlayer</key>
+	<string>小可爱</string>
+	
+	<key>Easy</key>
+	<string>小意思</string>
+	<key>Medium</key>
+	<string>一般般</string>
+	<key>Hard</key>
+	<string>太难啦</string>
+			
+	<key>Block5</key>
+	<string>5  块</string>
+	<key>Block10</key>
+	<string>10 块</string>
+	<key>Block15</key>
+	<string>15 块</string>
+	
+	
+	<!-- game menu layer -->
+	<key>ContinueGame</key>
+	<string>继续下棋</string>
+	
+	<key>LeaveGame</key>
+	<string>我不玩了</string>
+	
+	<key>NewGame</key>
+	<string>新的一盘</string>
+	
+	<key>BGM0</key>
+	<string>音乐：关</string>
+	<key>BGM1</key>
+	<string>音乐：开</string>
+	
+	<key>Sound0</key>
+	<string>音效：关</string>
+	<key>Sound1</key>
+	<string>音效：开</string>
+	
+</dict>
