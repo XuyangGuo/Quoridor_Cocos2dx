@@ -10,12 +10,17 @@ using namespace std;
 class NewGameLayer : public Layer {
 public:
 	virtual bool init();
-	void buttonGilClickEvent(Ref * sender);
+	// void buttonGilClickEvent(Ref * sender);
 	CREATE_FUNC(NewGameLayer);
 	
 private:
 	bool isGilAI;
 	bool isWendyAI;
 	int blockNum;
-	int difficulty; // 0 easy 1 medium 2 hard
+	int difficulty; // 0 easy 1 hard
+
+	Sprite * shadow;
+	Sprite * board;
+
+	void disappearAction();
 };

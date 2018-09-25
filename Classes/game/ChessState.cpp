@@ -25,7 +25,12 @@ ChessState::ChessState(int r) {
 
 void ChessState::getReachable(int p, vector<pair<int, int> > & v)
 {
-	int i0 = players[p].first, j0 = players[p].second, i1 = players[1 - p].first, j1 = players[1 - p].second;
+	getReachable(p, players[p], v);
+}
+
+void ChessState::getReachable(int p, pair<int, int> pos, vector<pair<int, int>>& v)
+{
+	int i0 = pos.first, j0 = pos.second, i1 = players[1 - p].first, j1 = players[1 - p].second;
 	if (canDown(i0, j0)) {
 		if (i0 - 1 == i1 && j0 == j1) {
 			if (canDown(i1, j1)) {
@@ -61,7 +66,7 @@ void ChessState::getReachable(int p, vector<pair<int, int> > & v)
 	}
 
 	if (canLeft(i0, j0)) {
-		if (i0== i1 && j0 - 1 == j1) {
+		if (i0 == i1 && j0 - 1 == j1) {
 			if (canLeft(i1, j1)) {
 				v.push_back(pair<int, int>(i1, j1 - 1));
 			} else {
@@ -130,6 +135,7 @@ Op ChessState::setRegret(int p)
 		players[p].second = op.j;
 	} else {
 		block[op.i][op.j] = EMPTY;
+		remain[p]++;
 	}
 	stepDouble--;
 	return op;
@@ -143,6 +149,65 @@ int ChessState::getStep()
 bool ChessState::canRegret()
 {
 	return !path[0].empty();
+}
+
+vector<Direction> ChessState::getCanBuild(int i, int j)
+{
+	vector<Direction> v;
+	// left
+	//if (i < 8 && i > -1 && (j == 1 || j > 1 && j <= 8 && block[i][j - 2] != HORIZONTAL)  && (j == 8 || block[i][j] != HORIZONTAL) && block[i][j - 1] == EMPTY && canMoveToEnd(Op(HORIZONTAL, pair<int, int> (i, j - 1)))) {
+	//	v.push_back(LEFT);
+	//}
+	//// right
+	//if (i < 8 && i > -1 && (j == 6 || j < 6 && j >= -1 && block[i][j + 2] != HORIZONTAL) && (j == -1 || block[i][j] != HORIZONTAL && block[i][j + 1] == EMPTY) && canMoveToEnd(Op(HORIZONTAL, pair<int, int>(i, j + 1)))) {
+	//	v.push_back(RIGHT);
+	//}
+	//// down
+	//if (j < 8 && j > -1 && (i == 1 || i > 1 && i <= 8 && block[i - 2][j] != VERTICAL) && (i == 8 || block[i][j] != VERTICAL && block[i - 1][j] == EMPTY) && canMoveToEnd(Op(VERTICAL, pair<int, int>(i - 1, j)))) {
+	//	v.push_back(DOWN);
+	//}
+	//// up
+	//if (j < 8 && j > -1 && (i == 6 || i < 6 && i >= -1 && block[i + 2][j] != VERTICAL) && (i == -1 || block[i][j] != VERTICAL && block[i + 1][j] == EMPTY) && canMoveToEnd(Op(VERTICAL, pair<int, int>(i + 1, j)))) {
+	//	v.push_back(UP);
+	//}
+
+	if (canPutPlank(i, j - 1, HORIZONTAL)) {
+		v.push_back(LEFT);
+	}
+	if (canPutPlank(i, j + 1, HORIZONTAL)) {
+		v.push_back(RIGHT);
+	}
+	if (canPutPlank(i - 1, j, VERTICAL)) {
+		v.push_back(DOWN);
+	}
+	if (canPutPlank(i + 1, j, VERTICAL)) {
+		v.push_back(UP);
+	}
+	return v;
+}
+
+inline bool ChessState::canPutPlank(int i, int j, Block b)
+{
+	if (b == HORIZONTAL) {
+		if (i < 8 && i > -1 && (j == 0 || j > 0 && j < 8 && block[i][j - 1] != HORIZONTAL) && (j == 7 || block[i][j + 1] != HORIZONTAL) && block[i][j] == EMPTY && canMoveToEnd(Op(HORIZONTAL, pair<int, int>(i, j)))) {
+			return true;
+		}
+	} else {
+		if (j < 8 && j > -1 && (i == 0 || i > 0 && i < 8 && block[i - 1][j] != VERTICAL) && (i == 7 || block[i + 1][j] != VERTICAL) && block[i][j] == EMPTY && canMoveToEnd(Op(VERTICAL, pair<int, int>(i, j)))) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool ChessState::canMoveToEnd(Op op)
+{
+	CCAssert(block[op.i][op.j] == EMPTY, "block[op.i,op.j] != EMPTY");
+	block[op.i][op.j] = op.block;
+	auto res = DFS(0) && DFS(1);
+	block[op.i][op.j] = EMPTY;
+	return res;
 }
 
 
@@ -165,6 +230,50 @@ inline bool ChessState::canRight(int i0, int j0)
 {
 	return j0 < 8 && (i0 == 8 || block[i0][j0] != VERTICAL) && (i0 == 0 || block[i0 - 1][j0] != VERTICAL);
 }
+
+
+bool ChessState::DFS(int p)
+{
+	stack<pair<int, int> > s;
+	bool visited[9][9];
+	for (int i = 0; i < 9; ++i) {
+		for (int j = 0; j < 9; ++j) {
+			visited[i][j] = false;
+		}
+	}	
+
+	s.push(this->players[p]);
+	visited[players[p].first][players[p].second] = true;
+
+	while (!s.empty()) {
+		int i = s.top().first, j = s.top().second;
+		s.pop();
+		if (canUp(i, j) && !visited[i + 1][j]) {
+			if (p == 0 && i == 7) {
+				return true;
+			}
+			visited[i + 1][j] = true;
+			s.push(pair<int, int>(i + 1, j));
+		}
+		if (canDown(i, j) && !visited[i - 1][j]) {
+			if (p == 1 && i == 1) {
+				return true;
+			}
+			visited[i - 1][j] = true;
+			s.push(pair<int, int>(i - 1, j));
+		}
+		if (canLeft(i, j) && !visited[i][j - 1]) {
+			visited[i][j - 1] = true;
+			s.push(pair<int, int>(i, j - 1));
+		}
+		if (canRight(i, j) && !visited[i][j + 1]) {
+			visited[i][j + 1] = true;
+			s.push(pair<int, int>(i, j + 1));
+		}
+	}
+	return false;
+}
+
 
 Op::Op(Block b, pair<int, int> p)
 {
