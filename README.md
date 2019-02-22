@@ -19,4 +19,4 @@ When I was playing the game with my girlfriend, she thought it was fun and hoped
 ## Other Instruction
 The game can be played with other player or AI. For the AI algorithm, I refer to this [repository](https://github.com/huangmubin/Quoridor).
 
-However, the AI algorithm is still monotonous. Perhaps it can be enhanced by Reinforcement Learning. Maybe I will try it when I *a lot of free time*.
+However, the AI algorithm is still monotonous. Perhaps it can be enhanced by Reinforcement Learning. Maybe I will try it when I have *a lot of free time*.
