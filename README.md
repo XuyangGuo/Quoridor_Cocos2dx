@@ -5,7 +5,7 @@
 - Cocos2d-x 3.17
 - Visual Studio 2017
 ## Introduction
-[Quoridor](https://en.wikipedia.org/wiki/Quoridor) (translated as [墙棋 or 步步为营](https://baike.baidu.com/item/%E6%AD%A5%E6%AD%A5%E4%B8%BA%E8%90%A5/4874) in Chinese) is a simple but funny board game. 
+[Quoridor](https://en.wikipedia.org/wiki/Quoridor) ([墙棋 or 步步为营](https://baike.baidu.com/item/%E6%AD%A5%E6%AD%A5%E4%B8%BA%E8%90%A5/4874) in Chinese) is a simple but funny board game. 
 ![](https://github.com/XuyangGuo/Quoridor_Cocos2dx/blob/master/ReadmeRef/img4.jpg)
 
 When I was playing the game with my friend, she thought it was fun and hoped me make it as an Android application. I finished it about a year later.
